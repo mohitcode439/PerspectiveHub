@@ -1,13 +1,15 @@
 import BlogList from "@/components/blog-list"
 import FeaturedPost from "@/components/featured-post"
 import SearchBar from "@/components/search-bar"
-import { getAllPosts } from "@/lib/blog-service"
 import Link from 'next/link'
+import connectDB from '@/lib/mongodb'
+import Post from '@/models/Post'
 
 export default async function Home() {
-  const posts = await getAllPosts()
-  const featuredPost = posts[0]
-  const recentPosts = posts.slice(1)
+  await connectDB();
+  const posts = await Post.find().sort({ date: -1 });
+  const featuredPost = posts[0];
+  const recentPosts = posts.slice(1);
 
   return (
     <div className="container mx-auto px-4 py-8">
